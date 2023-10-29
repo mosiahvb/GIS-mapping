@@ -135,6 +135,15 @@
     addPointWithPopup(-116.586158, 43.559978, "$399,900", "3", "1", "1,139", "719 Arrowhead Dr, Nampa, ID 83686", "images/img21.png"); //21
     addPointWithPopup(-116.590705, 43.555673, "$359,000", "3", "2", "1,233", "906 W Georgia Ave, Nampa, ID 83686", "images/img22.png"); //22
 
+    // This should add a heat map of prices that i created in
+    // ArcGIS online through creating another layer and putting
+    // the heat map on top of the map, it collects the heat map 
+    // through the URL.
+    const heatmapLayer = new MapImageLayer({
+        url: "https://arcg.is/15qTqa1", 
+      });
+
+      map.add(heatmapLayer);
     });
 
     </script>
