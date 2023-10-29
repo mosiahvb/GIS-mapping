@@ -10,7 +10,7 @@ A heat map provides a better understanding of where affordable housing is compar
 
 {Provide a link to your YouTube demonstration.  It should be a 4-5 minute demo of the software running and a walkthrough of the code.}
 
-[Software Demo Video](http://youtube.link.goes.here)
+[GIS Software Demo](https://youtu.be/nDUevHNZGXc)
 
 # Development Environment
 
