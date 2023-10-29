@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>House Pricing Map</title>
+
+    <style>
+      html,
+      body,
+      #mapScreen {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+    
+    <link rel="stylesheet" href="https://js.arcgis.com/4.28/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.28/"></script>
+
+    <script>
+      // Pulling different aspects and abilities from the API as well as Calling the map from ArcGIS to display
+      // the Graphics of the map. 
+        require(["esri/config", "esri/Map","esri/views/MapView","esri/Graphic","esri/layers/GraphicsLayer"], function (esriConfig, Map, MapView, Graphic, GraphicsLayer) 
+        {esriConfig.apiKey = "AAPK99c956b9ed674e52a002e2ca0e7d4757eExvn9_rkF2KYbYX7kBoKEiR3AUgslI3-1FiO5u4ILKIfwcu88aUZQ_3WSa3Pmo7";
+
+    // The base map
+    const map = new Map({
+        basemap: "arcgis/topographic"
+    });
+
+    // editing where the map starts from. Including longitude and longitude
+    // and how zoomed in the screen will be.
+    const view = new MapView({
+        map: map,
+        center: [-116.5635, 43.5789],
+        zoom: 12, 
+        container: "mapScreen"
+    });
+
+    // Creates a new layer to put new information on the existing mount 
+    // I like to think of it as laminating the map so you can draw on the map
+    // Without damaging it.
+    const graphicsLayer = new GraphicsLayer();
+    map.add(graphicsLayer);
+
+    // Function to collect and create points and pop-ups with information on the 
+    // points.
+    function addPointWithPopup(longitude, latitude, price, bedrooms, bathrooms, sf, address, img) {
+        const point = {
+        type: "point",
+        longitude: longitude,
+        latitude: latitude
+        };
+
+        // giving the points a style, adjusting how they will look,
+        // color and size.
+        const markerSymbol = {
+        type: "simple-marker",
+        color: [0, 255, 0],  
+        outline: {
+            color: [255, 255, 255],
+            width: 1
+        }
+        };
+
+        // takes the information from point, and marker symbol and creates the graphic.
+        const pointGraphic = new Graphic({
+        geometry: point,
+        symbol: markerSymbol
+        });
+
+        // This creates a pop-up for the point. Later, the 
+        // information that is needed will be input and then 
+        // a point will be made for each home. so this will be
+        // creating the text and style of the pop-up box.
+        pointGraphic.popupTemplate = {
+        title: address,
+        content: [
+          {
+            type: "text", 
+            text: `
+              <b>Price: ${price}</b>
+              <ul>
+                <li><b>Bedrooms: ${bedrooms}</b> {latitude}</li>
+                <li><b>Bathrooms: ${bathrooms}</b> {latitude}</li>
+                <li><b>Square footage: ${sf}</b> {longitude}</li>
+                <li><b>Address: ${address}</b> {longitude}</li>
+              </ul>
+            `
+          },
+          {
+            // Adding an Image of the house for sale.
+            type: "media",
+            mediaInfos: [{
+                        type: "image",
+                        value: {
+                            sourceURL: img
+                        }
+                    }] 
+          }
+    ]
+  };
+        // Actually displays or adds the graphics of the point to the map to be seen 
+        // when looking at the map.
+        graphicsLayer.add(pointGraphic);
+    }
+
+    // Housing data. Homes for sale, by Location, price, number of bedrooms,
+    // number of bathrooms, square footage, address, and the image to be used. 
+    addPointWithPopup(-116.621416, 43.572861, "$494,990", "5", "3", "2,317", "13799 Sonata Way, Nampa, ID 83651", "images/img1.png"); //1
+    addPointWithPopup(-116.621377, 43.572656, "$489,990", "5", "3", "2,710", "13785 Sonata Way, Nampa, ID 83651", "images/img2.png"); //2
+    addPointWithPopup(-116.621373, 43.572468, "$509,990", "4", "3", "2,530", "13771 S Sonata Way, Nampa, ID 83651", "images/img3.png"); //3
+    addPointWithPopup(-116.620705, 43.572533, "$474,990", "4", "2", "2,100", "13770 Sonata Way, Nampa, ID 83651", "images/img4.png"); //4
+    addPointWithPopup(-116.618434, 43.575000, "$589,000", "6", "4", "2,787", "11283 W Quartet St, Nampa, ID 83651", "images/img5.png"); //5
+    
+    addPointWithPopup(-116.559160, 43.627144, "$380,000", "3", "2", "1,447", "8293 E Copenhaver St, Nampa, ID 83687", "images/img6.png"); //6
+    addPointWithPopup(-116.568922, 43.635330, "$639,900", "4", "3", "2,586", "8797 E Hyacinth St, Nampa, ID 83687", "images/img7.png"); //7
+    addPointWithPopup(-116.546699, 43.626251, "$494,990", "4", "2", "2,100", "7653 E Limpkin Dr, Nampa, ID 83687", "images/img8.png"); //8
+    addPointWithPopup(-116.547700, 43.620093, "$433,990", "4", "2", "2,279", "7733 Edison St, Nampa, ID 83687", "images/img9.png"); //9
+    addPointWithPopup(-116.550010, 43.620105, "$432,990", "4", "2", "2,279", "7865 E Edison St, Nampa, ID 83687", "images/img10.png"); //10
+
+    addPointWithPopup(-116.580200, 43.583470, "$349,900", "3", "1", "1,976", "220 17th Ave S, Nampa, ID 83651", "images/img11.png"); //11
+    addPointWithPopup(-116.556130, 43.573866, "$318,000", "4", "2", "2,100", "7653 E Limpkin Dr, Nampa, ID 83687", "images/img12.png"); //12
+    addPointWithPopup(-116.593326, 43.580170, "$349,900", "3", "2", "1,904", "57 N Midland Blvd, Nampa, ID 83651", "images/img13.png"); //13
+    addPointWithPopup(-116.567800, 43.581980, "$279,900", "2", "1", "916", "215 6th Ave S, Nampa, ID 83651", "images/img14.png"); //14
+    addPointWithPopup(-116.576420, 43.575027, "$375,000", "5", "2", "2,100", "213 Elmore Ave, Nampa, ID 83651", "images/img15.png"); //15
+
+    addPointWithPopup(-116.567420, 43.564666, "$299,900", "3", "1", "962", "424 E Sheridan Ave, Nampa, ID 83686", "images/img16.png"); //16
+    addPointWithPopup(-116.554219, 43.563627, "$349,000", "3", "2", "1,592", "524 S Almond St, Nampa, ID 83686", "images/img17.png"); //17
+    addPointWithPopup(-116.554053, 43.570486, "$214,900", "2", "1", "1,155", "2011 4th St S, Nampa, ID 83651", "images/img18.png"); //18
+    addPointWithPopup(-116.558256, 43.565573, "$275,000", "1", "1", "1,040", "1108 E Sherman Ave, Nampa, ID 83686", "images/img19.png"); //19
+    addPointWithPopup(-116.572049, 43.574019, "$558,000", "4", "3", "2,032", "815 11th Ave S, Nampa, ID 83651", "images/img20.png"); //20
+    addPointWithPopup(-116.586158, 43.559978, "$399,900", "3", "1", "1,139", "719 Arrowhead Dr, Nampa, ID 83686", "images/img21.png"); //21
+    addPointWithPopup(-116.590705, 43.555673, "$359,000", "3", "2", "1,233", "906 W Georgia Ave, Nampa, ID 83686", "images/img22.png"); //22
+
+    });
+
+    </script>
+
+  </head>
+  <body>
+    <div id="mapScreen"></div>
+  </body>
+</html>
